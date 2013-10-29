@@ -210,7 +210,7 @@ Pixastic.Effects = (function() {
             n = width * height * 4,
             x, y, i, j, 
             inx, iny, w,
-            tmpData = [],
+            tmpData = new Uint8Array(n),
             maxKernelSize = 13,
             kernelSize = clamp(kernelSize, 3, maxKernelSize),
             k1 = -kernelSize / 2 + (kernelSize % 2 ? 0.5 : 0),
@@ -579,7 +579,7 @@ Pixastic.Effects = (function() {
             var n = width * height * 4,
                 i, r, g, b,
                 amount = options.amount,
-                tmpData = [],
+                tmpData = new Uint8Array(n),
                 gaussProgress,
                 prog, lastProg = 0;
 

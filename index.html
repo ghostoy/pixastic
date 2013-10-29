@@ -30,6 +30,44 @@
                     progress.style.height = (p * 100) + "%";
                 });
             }
+
+            function runOne(counter, test, time, done) {
+                if (counter >= 0) {
+                    var img = document.getElementById("original-image"),
+                        canvas = document.getElementById("output-canvas"),
+                        ctx = canvas.getContext("2d"),
+                        P = new Pixastic(ctx),
+                        start = Date.now();
+
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+
+                    P[test.effect](test.options).done(function(){
+                        runOne(counter-1, test, Date.now() - start + time, done);
+                    });
+                } else {
+                    done(time);
+                }
+            }
+
+            function benchOne(test, done) {
+                runOne(10, test, 0, function(time){
+                    done(test.effect + '\t:\t' + Math.floor(time/10));
+                });
+            }
+
+            function bench(i, results) {
+                if (i < tests.length) {
+                    benchOne(tests[i], function(result) {
+                        results.push(result);
+                        bench(i+1, results);
+                    });
+                } else {
+                    var resultOutput = document.getElementById("result-output");
+                    resultOutput.innerHTML = results.join('\n');
+                }
+            }
             
             var tests = [
                 {
@@ -158,6 +196,12 @@
                     doTest(test);
                 }
             }, false);
+
+            var benchmark = document.getElementById('benchmark');
+
+            benchmark.addEventListener("click", function(e){
+                bench(0, []);
+            });
             
         }
     </script>
@@ -168,7 +212,8 @@
     <img src="sample-images/monalisa.jpg" id="original-image">
     <div id="progress"><div id="progress-inner"></div></div>
     <canvas id="output-canvas"></canvas>
-
+    <button id="benchmark">Test All</button>
+    <pre id="result-output"></pre>
 
 </body>
 </html>
