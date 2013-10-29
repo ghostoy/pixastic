@@ -703,7 +703,7 @@ Pixastic.Effects = (function() {
                 a12 = x,
                 a22 = y + x,
 
-                tmpData = [],
+                tmpData = new Int16Array(n),
                 
                 prog, lastProg = 0,
                 convProgress;
@@ -742,8 +742,8 @@ Pixastic.Effects = (function() {
         findedges : function(inData, outData, width, height, options, progress) {
             var n = width * height * 4,
                 i,
-                data1 = [], 
-                data2 = [],
+                data1 = new Int16Array(n), 
+                data2 = new Int16Array(n),
                 gr1, gr2, gg1, gg2, gb1, gb2,
                 prog, lastProg = 0,
                 convProgress1, convProgress2;
