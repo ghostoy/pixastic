@@ -31,8 +31,8 @@
                 });
             }
 
-            function runOne(counter, test, time, done) {
-                if (counter >= 0) {
+            function benchOne(counter, test, time, done) {
+                if (counter > 0) {
                     var img = document.getElementById("original-image"),
                         canvas = document.getElementById("output-canvas"),
                         ctx = canvas.getContext("2d"),
@@ -44,28 +44,21 @@
                     ctx.drawImage(img, 0, 0);
 
                     P[test.effect](test.options).done(function(){
-                        runOne(counter-1, test, Date.now() - start + time, done);
+                        benchOne(counter-1, test, Date.now() - start + time, done);
                     });
                 } else {
                     done(time);
                 }
             }
 
-            function benchOne(test, done) {
-                runOne(10, test, 0, function(time){
-                    done(test.effect + '\t:\t' + Math.floor(time/10));
-                });
-            }
-
-            function bench(i, results) {
+            function bench(i, done) {
                 if (i < tests.length) {
-                    benchOne(tests[i], function(result) {
-                        results.push(result);
-                        bench(i+1, results);
+                    benchOne(10, tests[i], 0, function(time) {
+                        document.getElementById("result-output").innerHTML += tests[i].effect + '\t:\t' + (time / 10) + '\n';
+                        bench(i+1, done);
                     });
-                } else {
-                    var resultOutput = document.getElementById("result-output");
-                    resultOutput.innerHTML = results.join('\n');
+                } else if(done) {
+                    done();
                 }
             }
             
@@ -200,7 +193,12 @@
             var benchmark = document.getElementById('benchmark');
 
             benchmark.addEventListener("click", function(e){
-                bench(0, []);
+                var outputCanvas = document.getElementById('output-canvas');
+                outputCanvas.style.display = 'none';
+                document.getElementById('result-output').innerHTML = '';
+                bench(0, function() {
+                    outputCanvas.style.display = 'block';
+                });
             });
             
         }
