@@ -43,3 +43,7 @@ div#progress div {
     height : 0;
     background-color : rgb(190,220,190);
 }
+
+#benchmark-container {
+    clear: both;
+}

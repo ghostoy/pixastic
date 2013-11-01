@@ -53,8 +53,8 @@
 
             function bench(i, done) {
                 if (i < tests.length) {
-                    benchOne(10, tests[i], 0, function(time) {
-                        document.getElementById("result-output").innerHTML += tests[i].effect + '\t:\t' + (time / 10) + '\n';
+                    benchOne(100, tests[i], 0, function(time) {
+                        document.getElementById("result-output").innerHTML += tests[i].effect + '\t:\t' + (time / 100) + '\n';
                         bench(i+1, done);
                     });
                 } else if(done) {
@@ -206,12 +206,15 @@
 </head>
 <body>
 
+    <a href="parent.html">Jump to benchmark page</a>
     <ul id="testlist"></ul>
     <img src="sample-images/monalisa.jpg" id="original-image">
     <div id="progress"><div id="progress-inner"></div></div>
     <canvas id="output-canvas"></canvas>
-    <button id="benchmark">Test All</button>
-    <pre id="result-output"></pre>
+    <div id="benchmark-container">
+        <button id="benchmark">Test All</button>
+        <pre id="result-output"></pre>
+    </div>
 
 </body>
 </html>
